@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::view('/', 'welcome')->name('home');
 // URI parametro que eu passo apos url
 
-Route::resource('categoria',categoriaController::class);
+Route::resource('Categoria', categoriaController::class);
 
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('dashboard', 'dashboard')->name('dashboard');
@@ -14,4 +14,4 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // 1 nome da minha URI 
 // 2 É o nome da view que eu quero renderizar
 
-require __DIR__.'/settings.php';
+require __DIR__ . '/settings.php';
