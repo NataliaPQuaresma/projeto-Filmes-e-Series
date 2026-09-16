@@ -1,0 +1,72 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Categoria;
+use Illuminate\Http\Request;
+
+
+class CategoriaController extends Controller
+{
+
+    public function index() //view 
+    {
+        $categoria = Categoria::all();
+        return view('categoria.index', compact('categoria'));
+    }
+
+
+    public function create() //view
+    {
+        // pagina responsavel por criar uma nova categoria ou novo item 
+        return view('categoria.create');
+    }
+
+
+    public function show(Categoria $categoria) //view 
+    {
+        return view('categorias.show', compact('categoria'));
+    }
+
+    public function edit(Categoria $categoria)
+    {
+        return view('categoria.edit', compact('categoria'));
+    }
+
+    private function validar(Request $request)
+    {
+        return $request->validate([
+            'nome' => ['required', 'string', 'max:100'],
+            'descricao' => ['nullable', 'string', 'max:1000'],
+        ], [
+            'nome.required' => 'Informe o nome da categoria.',
+            'nome.string' => 'O nome deve ser um texto.',
+            'nome.max' => 'O nome deve ter no máximo 100 caracteres.',
+            'descricao.string' => 'A descrição deve ser um texto.',
+            'descricao.max' => 'A descrição deve ter no máximo 1000 caracteres.',
+        ]);
+    }
+
+    public function store(Request $request)
+    {
+        Categoria::create($this->validar($request));
+
+        return redirect()->route('categoria.index')
+            ->with('sucesso', 'Categoria cadastrada com sucesso!');
+    }
+
+    public function update(Request $request, Categoria $categoria)
+    {
+        $categoria->update($this->validar($request));
+        return redirect()->route('categoria.index')
+            ->with('sucesso', 'Categoria atualizada com sucesso!');
+    }
+
+    public function destroy(Categoria $categoria)
+    {
+        $categoria->delete();
+
+        return redirect()->route('categoria.index')
+            ->with('sucesso', 'Categoria excluída com sucesso!');
+    }
+}
